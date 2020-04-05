@@ -1,4 +1,4 @@
-# Udagram Image Filtering Microservice
+# Udagram Image Application: Microservices Deployment
 
 Udagram is a simple cloud application developed alongside the Udacity Cloud Engineering Nanodegree. It allows users to register and log into a web client, post photos to the feed, and process photos using an image filtering microservice.
 
@@ -8,46 +8,71 @@ A basic Ionic client web application which consumes the RestAPI Backend.
 2. [The RestAPI Feed Backend](/udacity-c3-restapi-feed), a Node-Express feed microservice.
 3. [The RestAPI User Backend](/udacity-c3-restapi-user), a Node-Express user microservice.
 
-## Getting Setup
 
-> _tip_: this frontend is designed to work with the RestAPI backends). It is recommended you stand up the backend first, test using Postman, and then the frontend should integrate.
+### Setup and deployment
 
-### Installing Node and NPM
-This project depends on Nodejs and Node Package Manager (NPM). Before continuing, you must download and install Node (NPM is included) from [https://nodejs.com/en/download](https://nodejs.org/en/download/).
+#### Running the application with docker
 
-### Installing Ionic Cli
-The Ionic Command Line Interface is required to serve and build the frontend. Instructions for installing the CLI can be found in the [Ionic Framework Docs](https://ionicframework.com/docs/installation/cli).
+The Docker images are publicly available, you can find them in ```https://hub.docker.com/search?q=cpenaloza%2F&type=image```
 
-### Installing project dependencies
+1. Export the necessary environment variables. Your AWS credentials must already be set in the ```~.aws/credentials``` file. This variables are used in the ```docker-compose.yaml``` file inside of the deployment directory:
+   ```
+    export POSTGRESS_USERNAME=yourusername;
+    export POSTGRESS_PASSWORD=yourpassword;
+    export POSTGRESS_DB=postgresdbname;
+    export POSTGRESS_HOST=postgreshost;
+    export AWS_REGION=awsregion;
+    export AWS_PROFILE=default;
+    export AWS_BUCKET=udagramdemo;
+    export JWT_SECRET=helloworld;
+   ```
 
-This project uses NPM to manage software dependencies. NPM Relies on the package.json file located in the root of this repository. After cloning, open your terminal and run:
-```bash
-npm install
-```
->_tip_: **npm i** is shorthand for **npm install**
+2. Build the images for each of the application's services, using the command:
+   ```
+   docker-compose -f docker-compose-build.yaml build --parallel
+    ```
+3. Run a container for each of the services (you may use detached mode to run containers in the background adding the -d flag):
+   ```
+   docker-compose up
+   ```
+4. Go to the browser and open ```http://localhost:8100/``` to see the Udagram application
+5. When you wish to stop the container use:
+   ```
+    docker-compose stop
+    # Or, to remove (and stop) the container:
+    docker-compose down
+    ```
 
-### Setup Backend Node Environment
-You'll need to create a new node server. Open a new terminal within the project directory and run:
-1. Initialize a new project: `npm init`
-2. Install express: `npm i express --save`
-3. Install typescript dependencies: `npm i ts-node-dev tslint typescript  @types/bluebird @types/express @types/node --save-dev`
-4. Look at the `package.json` file from the RestAPI repo and copy the `scripts` block into the auto-generated `package.json` in this project. This will allow you to use shorthand commands like `npm run dev`
+#### Running the application with Kubernetes
 
-
-### Configure The Backend Endpoint
-Ionic uses enviornment files located in `./src/enviornments/enviornment.*.ts` to load configuration variables at runtime. By default `environment.ts` is used for development and `enviornment.prod.ts` is used for produciton. The `apiHost` variable should be set to your server url either locally or in the cloud.
-
-***
-### Running the Development Server
-Ionic CLI provides an easy to use development server to run and autoreload the frontend. This allows you to make quick changes and see them in real time in your browser. To run the development server, open terminal and run:
-
-```bash
-ionic serve
-```
-
-### Building the Static Frontend Files
-Ionic CLI can build the frontend into static HTML/CSS/JavaScript files. These files can be uploaded to a host to be consumed by users on the web. Build artifacts are located in `./www`. To build from source, open terminal and run:
-```bash
-ionic build
-```
-***
+1. Export the necessary environment variables. These include the ones shown above in the Docker section. In addition to those, add a CREDENTIALS environment variable with the value obtained from running (base64 encoding of your aws credentials file):
+   ```
+    cat ~/.aws/credentials | base64
+   ```
+These variables are used by the ```deployment.yaml``` files in the ```deployment/k8s``` directory.
+2. cd into the ```udacity-cr-deployment/k8s``` directory
+2. Define the kubernetes services:
+   ```
+   kubectl apply -f backend-feed-service.yaml 
+   kubectl apply -f backend-user-service.yaml 
+   kubectl apply -f frontend-service.yaml 
+   kubectl apply -f reverseproxy-service.yaml 
+   ```
+3. Carry out the deployments:
+   ```
+   kubectl apply -f backend-user-deployment.yaml 
+   kubectl apply -f backend-user-deployment.yaml 
+   kubectl apply -f frontend-deployment.yaml 
+   kubectl apply -f reverseproxy-deployment.yaml 
+   ```
+4. Check that all the pods are running:
+   ```
+   kubectl get pod
+   ```
+5. To test locally run:
+   ```
+   kubectl port-forward service/frontend 8100:8100
+   kubectl port-forward service/reverseproxy 8080:8080
+   ```
+6. Go to the browser and open ```http://localhost:8100/``` to see the Udagram application
+   
