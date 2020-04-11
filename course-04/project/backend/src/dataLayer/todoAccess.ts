@@ -63,14 +63,17 @@ export class TodoAccess {
       "userId": todo.userId,
       "createdAt": todo.createdAt
     };
+    if (!todo.attachmentUrl.startsWith("http")) todo.attachmentUrl=`https://${this.bucketName}.s3.amazonaws.com/${todo.attachmentUrl}`
+
     await this.docClient.update({
       TableName: this.todosTable,
       Key: key,
-      UpdateExpression: "set #n = :n, dueDate = :dd, done = :d",
+      UpdateExpression: "set #n = :n, dueDate = :dd, done = :d, attachmentUrl = :a",
       ExpressionAttributeValues: {
         ":n": todo.name,
         ":dd": todo.dueDate,
-        ":d": todo.done
+        ":d": todo.done,
+        ":a": todo.attachmentUrl,
       },
       ExpressionAttributeNames: {
         "#n": "name"

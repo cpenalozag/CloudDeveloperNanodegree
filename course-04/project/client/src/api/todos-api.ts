@@ -68,6 +68,12 @@ export async function getUploadUrl(
   return response.data.uploadUrl
 }
 
-export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
+export async function uploadFile(idToken: string, uploadUrl: string, file: Buffer, todoId: string): Promise<void> {
   await Axios.put(uploadUrl, file)
+  const updatedTodo = {
+    name: '',
+    dueDate: '',
+    attachmentUrl: todoId
+  } as UpdateTodoRequest
+  await patchTodo(idToken, todoId, updatedTodo)
 }

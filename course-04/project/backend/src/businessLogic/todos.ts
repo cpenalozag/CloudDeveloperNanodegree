@@ -26,11 +26,11 @@ export async function updateTodo(
   todoId: String,
   UpdateTodoRequest: UpdateTodoRequest
 ): Promise<TodoItem> {
-
   let todo = await getTodoById(todoId)
-  todo.name = UpdateTodoRequest.name
-  todo.dueDate = UpdateTodoRequest.dueDate
-  todo.done = UpdateTodoRequest.done
+  if (UpdateTodoRequest.name) todo.name = UpdateTodoRequest.name 
+  if (UpdateTodoRequest.dueDate) todo.dueDate = UpdateTodoRequest.dueDate
+  if (UpdateTodoRequest.done) todo.done = UpdateTodoRequest.done
+  if (UpdateTodoRequest.attachmentUrl) todo.attachmentUrl = UpdateTodoRequest.attachmentUrl
 
   return await todoAccess.updateTodo(todo)
 }
@@ -49,6 +49,7 @@ export async function createTodo(
     name: CreateTodoRequest.name,
     dueDate: CreateTodoRequest.dueDate,
     createdAt: new Date().toISOString(),
+    attachmentUrl: CreateTodoRequest.attachmentUrl,
     done: false
   })
 }

@@ -9,6 +9,9 @@
       "dueDate": {
         "type": "string"
       },
+      "done": {
+        "type": "boolean"
+      },
       "attachmentUrl": {
         "type": "string"
       }
