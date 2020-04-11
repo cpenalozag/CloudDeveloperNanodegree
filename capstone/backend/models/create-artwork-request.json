@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "todo-type",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "forSale": {
+        "type": "boolean"
+      },
+      "attachmentUrl": {
+        "type": "string"
+      }
+    },
+    "required": [
+        "name",
+        "forSale",
+        "attachmentUrl"
+    ],
+    "additionalProperties": false
+  }

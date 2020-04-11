@@ -1,0 +1,114 @@
+import * as AWS from 'aws-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
+import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+
+const XAWS = AWSXRay.captureAWS(AWS)
+
+import { ArtworkItem } from '../models/ArtworkItem'
+
+export class ArtworkAccess {
+
+  constructor(
+    private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
+    private readonly s3 = new XAWS.S3({ signatureVersion: 'v4' }),
+    private readonly artworkIdIndex = process.env.ARTWORK_ID_INDEX,
+    private readonly bucketName = process.env.IMAGES_S3_BUCKET,
+    private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION,
+    private readonly artworkTable = process.env.ARTWORK_TABLE) {
+  }
+
+  async getArtworkById(artworkId): Promise<ArtworkItem> {
+    const result = await this.docClient.query({
+      TableName: this.artworkTable,
+      IndexName: this.artworkIdIndex,
+      KeyConditionExpression: 'artworkId = :artworkId',
+      ExpressionAttributeValues: {
+        ':artworkId': artworkId
+      }
+    }).promise()
+    return result.Items[0] as ArtworkItem
+  }
+
+  async getUserArtworks(userId: String): Promise<ArtworkItem[]> {
+    const result = await this.docClient.query({
+      TableName: this.artworkTable,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId
+      },
+      ScanIndexForward: false
+    })
+      .promise()
+
+    return result.Items as ArtworkItem[]
+  }
+
+  async getAllArtworks(): Promise<ArtworkItem[]> {
+    console.log('Getting all artworks')
+
+    const result = await this.docClient.scan({
+      TableName: this.artworkTable
+    }).promise()
+
+    const items = result.Items
+    return items as ArtworkItem[]
+  }
+
+  async deleteArtwork(artwork: ArtworkItem): Promise<ArtworkItem> {
+    const key = {
+      "userId": artwork.userId,
+      "createdAt": artwork.createdAt
+    };
+    await this.docClient.delete({
+      TableName: this.artworkTable,
+      Key: key
+    }).promise()
+
+    return artwork
+  }
+
+  async updateArtwork(artwork: ArtworkItem): Promise<ArtworkItem> {
+    const key = {
+      "userId": artwork.userId,
+      "createdAt": artwork.createdAt
+    };
+
+    artwork.attachmentUrl=`https://${this.bucketName}.s3.amazonaws.com/${artwork.attachmentUrl}`
+
+    await this.docClient.update({
+      TableName: this.artworkTable,
+      Key: key,
+      UpdateExpression: "set #n = :n, description = :d, forSale = :s, attachmentUrl = :a",
+      ExpressionAttributeValues: {
+        ":n": artwork.name,
+        ":d": artwork.description,
+        ":s": artwork.forSale,
+        ":a": artwork.attachmentUrl,
+      },
+      ExpressionAttributeNames: {
+        "#n": "name"
+      }
+    }).promise()
+
+    return artwork
+  }
+
+  async createArtwork(artwork: ArtworkItem): Promise<ArtworkItem> {
+
+    await this.docClient.put({
+      TableName: this.artworkTable,
+      Item: artwork
+    }).promise()
+
+    return artwork
+  }
+
+  async generateUploadUrl(artworkId: String) {
+    return this.s3.getSignedUrl('putObject', {
+      Bucket: this.bucketName,
+      Key: artworkId,
+      Expires: this.urlExpiration
+    })
+  }
+
+}
