@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "ebbc2500-8092-452d-8117-711b3f852a60",
+		"name": "Udacity C4 Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TODOs",
+			"item": [
+				{
+					"name": "Get all todos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Finish cloud developer nanodegree\",\n\t\"dueDate\": \"2020-04-10\"\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update todo",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Change the world\",\n\t\"dueDate\": \"2019-12-11\",\n\t\"done\": true\n}"
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/49767f46-996d-4296-b5f6-01b0a65bfcba",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"todos",
+								"49767f46-996d-4296-b5f6-01b0a65bfcba"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete todo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/dec4a694-5407-4c84-903f-a91664234450",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"todos",
+								"dec4a694-5407-4c84-903f-a91664234450"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get attachment URL",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/3836b777-9bc4-4429-9b79-ba4e4f5f91c0/attachment",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"todos",
+								"3836b777-9bc4-4429-9b79-ba4e4f5f91c0",
+								"attachment"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ce2b42d4-8cc5-4f30-a6ed-e7f0f303c3fd",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "efb16c49-3866-4241-97d1-360ad72736d8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2e83c0fe-6650-44d5-a90f-4c27ff720d83",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "977c227e-2df3-42eb-9a48-ec25e2f7eeae",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "969d2383-1255-4762-9654-4ff8d2ba55bc",
+			"key": "apiId",
+			"value": "0jyw0cfm70",
+			"type": "string"
+		},
+		{
+			"id": "75dccfa1-dd6c-471e-ae5c-42403dcc621c",
+			"key": "authToken",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkVScDI0Vi0za2dfb1FTZEFPM0xBTSJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLWRldmVsb3Blci1uYW5vZGVncmVlLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwOTY5ODA4OTkyMzk2MDU5OTIxNyIsImF1ZCI6Im5GdnVsVno1VE9PU01UM0pUWUlKa1FoSFRNNTByekI0IiwiaWF0IjoxNTg2NTcwMTQ4LCJleHAiOjE1ODY2MDYxNDgsImF0X2hhc2giOiJUa2FmUHdoWXAxWlhHMXozNHpoNnBBIiwibm9uY2UiOiJHVmRTSkJqTV9lSUxRRjFhWGZIaHZES2ZwQ01adEdtLiJ9.B0Nzh3tK5GxIqG5Pg8fRoY6nNBh6LnW3dmxKtY4wG7qge8a6WbzS59pGlUZY68ZGmGU3CsOD-8W0Agy8QKULWhm0GavG6P4R80QptZbXIHso_k0NGdDWvJlI_AxASw1ZNQOH7B0bREnW8pWU8QdAnIqD5bUjk1qWzaVjcnj1UCj8HVQLd54C--5RNIimDIGpoa17vCUUJazX0VpKy4PYB9-BAIa1ZHcyTa1faMlgBs11RYOP6FUaRw1dsTOJnQ7nMSiQ9PW4pRElnuM3YVcgOXZmB0-dFiaufaBBA5-UaIR-mTKW73F4m-PuxHNpAW0yR2rC3NYgiq8WJdSPoDNNjA",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
