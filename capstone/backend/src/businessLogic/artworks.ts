@@ -12,8 +12,8 @@ export async function getArtworkById(artworkId: String): Promise<ArtworkItem> {
   return artworkAccess.getArtworkById(artworkId)
 }
 
-export async function getAllArtworks(): Promise<ArtworkItem[]> {
-  return await artworkAccess.getAllArtworks()
+export async function getRecentArtworks(): Promise<ArtworkItem[]> {
+  return await artworkAccess.getRecentArtworks()
 }
 
 export async function getUserArtworks(userId: string): Promise<ArtworkItem[]> {
