@@ -2,11 +2,11 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
-import { getAllArtworks } from '../../businessLogic/artworks'
+import { getRecentArtworks } from '../../businessLogic/artworks'
 
 export const handler: APIGatewayProxyHandler = async (): Promise<APIGatewayProxyResult> => {
 
-  const artworks = await getAllArtworks()
+  const artworks = await getRecentArtworks()
 
   return {
     statusCode: 200,

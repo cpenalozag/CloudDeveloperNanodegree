@@ -44,15 +44,24 @@ export class ArtworkAccess {
     return result.Items as ArtworkItem[]
   }
 
-  async getAllArtworks(): Promise<ArtworkItem[]> {
-    console.log('Getting all artworks')
+  async getRecentArtworks(): Promise<ArtworkItem[]> {
+    console.log('Getting all artworks from this month')
 
-    const result = await this.docClient.scan({
-      TableName: this.artworkTable
-    }).promise()
+    let date = new Date()
+    date.setMonth(date.getMonth()-1)
+    const filterDateString = date.toISOString()
 
-    const items = result.Items
-    return items as ArtworkItem[]
+    const result = await this.docClient.query({
+      TableName: this.artworkTable,
+      KeyConditionExpression: 'createdAt > :createdAt',
+      ExpressionAttributeValues: {
+        ':createdAt': filterDateString
+      },
+      ScanIndexForward: false
+    })
+      .promise()
+
+    return result.Items as ArtworkItem[]
   }
 
   async deleteArtwork(artwork: ArtworkItem): Promise<ArtworkItem> {
