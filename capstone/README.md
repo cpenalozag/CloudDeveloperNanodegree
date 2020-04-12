@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/cpenalozag/cloud-developer-nanodegree.svg?branch=master)](https://travis-ci.com/cpenalozag/cloud-developer-nanodegree)
 # Serverless Gallery
 
 Simple Gallery application using AWS Lambda and Serverless framework. 
@@ -39,6 +40,11 @@ export const authConfig = {
 ```
 
 # How to run the application
+
+# CI/CD
+The repository is connected to Travis-CI and will build and deploy when code is pushed. The dev branch is associated with the dev deployment stage and the master branch is associated with the prod deployment stage:
+![Build](images/build.png)
+![Deployment](images/deployment.png)
 
 ## Backend
 
