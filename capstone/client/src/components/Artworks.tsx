@@ -140,6 +140,7 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
   renderArtworksList() {
     return (
       <Grid padded>
+        <Header as="h3">Artworks for sale</Header>
         {this.state.artworks.map((artwork, pos) => {
           return (
             <Grid.Column width={8} key={artwork.artworkId}>
