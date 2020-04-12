@@ -190,6 +190,8 @@ resources:
             KeySchema:
               - AttributeName: artworkId
                 KeyType: HASH
+            Projection:
+              ProjectionType: ALL
           - IndexName: ${self:provider.environment.ARTWORK_CREATION_INDEX}
             KeySchema:
               - AttributeName: createdAt
