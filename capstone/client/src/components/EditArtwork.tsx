@@ -54,7 +54,7 @@ export class EditTodo extends React.PureComponent<
       const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.artworkId)
 
       this.setUploadState(UploadState.UploadingFile)
-      await uploadFile(this.props.auth.getIdToken(), uploadUrl, this.state.file, this.props.match.params.artworkId)
+      await uploadFile(uploadUrl, this.state.file)
 
       alert('File was uploaded!')
     } catch (e) {
@@ -73,7 +73,7 @@ export class EditTodo extends React.PureComponent<
   render() {
     return (
       <div>
-        <h1>Upload new image</h1>
+        <h1>Upload a picture of the artwork</h1>
 
         <Form onSubmit={this.handleSubmit}>
           <Form.Field>

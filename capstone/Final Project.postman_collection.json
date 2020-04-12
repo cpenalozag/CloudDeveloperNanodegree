@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "3dd75ff9-875b-4815-b55b-ec7c8dc6cd67",
-		"name": "Udacity C4 Project",
+		"_postman_id": "f2d9910f-5089-45c3-b1af-a3ec44f7a672",
+		"name": "Udacity Capstone Project",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -9,7 +9,7 @@
 			"name": "TODOs",
 			"item": [
 				{
-					"name": "Get all todos",
+					"name": "Get all artworks",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -20,7 +20,7 @@
 							}
 						],
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos",
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/artworks",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -31,14 +31,51 @@
 							],
 							"path": [
 								"dev",
-								"todos"
+								"artworks"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create todo",
+					"name": "Get artworks by user id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/artists/:userId/artworks",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"artists",
+								":userId",
+								"artworks"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "google-oauth2|109698089923960599217"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create artwork",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -56,10 +93,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Finish cloud developer nanodegree\",\n\t\"dueDate\": \"2020-04-10\"\n}"
+							"raw": "{\n\t\"name\": \"The ninth wave\",\n\t\"description\": \"The title refers to an old sailing expression referring to a wave of incredible size that comes after a succession of incrementally larger waves.\",\n\t\"forSale\": true\n}"
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos",
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/artworks",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -70,53 +107,14 @@
 							],
 							"path": [
 								"dev",
-								"todos"
+								"artworks"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create todo with attachment",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{authToken}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Walk in the mountains\",\n\t\"dueDate\": \"2019-07-29T20:01:45.424Z\",\n\t\"done\": false,\n\t\"attachmentUrl\": \"https://todos-attachments-final-project-dev.s3.amazonaws.com/7e14e45a-2a5b-4a5a-960f-02f2758028ec\"\n}"
-						},
-						"url": {
-							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos",
-							"protocol": "https",
-							"host": [
-								"{{apiId}}",
-								"execute-api",
-								"us-east-1",
-								"amazonaws",
-								"com"
-							],
-							"path": [
-								"dev",
-								"todos"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update todo",
+					"name": "Update artwork",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -134,10 +132,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Change the world\",\n\t\"dueDate\": \"2019-12-11\",\n\t\"done\": true\n}"
+							"raw": "{\n\t\"name\": \"New title\",\n\t\"description\": \"New description.\",\n\t\"forSale\": false\n}"
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/ba4afa78-01ee-4144-aa34-46fac130941d",
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/artworks/:artworkId",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -148,15 +146,21 @@
 							],
 							"path": [
 								"dev",
-								"todos",
-								"ba4afa78-01ee-4144-aa34-46fac130941d"
+								"artworks",
+								":artworkId"
+							],
+							"variable": [
+								{
+									"key": "artworkId",
+									"value": "77a5f63e-9dee-435e-b063-cec9b5a65b37"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete todo",
+					"name": "Delete artwork",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -177,7 +181,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/983e1059-9583-4ea3-9a96-82111caefdab",
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/:artworkId",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -189,7 +193,13 @@
 							"path": [
 								"dev",
 								"todos",
-								"983e1059-9583-4ea3-9a96-82111caefdab"
+								":artworkId"
+							],
+							"variable": [
+								{
+									"key": "artworkId",
+									"value": "aaaa"
+								}
 							]
 						}
 					},
@@ -211,7 +221,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/todos/3836b777-9bc4-4429-9b79-ba4e4f5f91c0/attachment",
+							"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/artworks/:artworkId/attachment",
 							"protocol": "https",
 							"host": [
 								"{{apiId}}",
@@ -222,9 +232,15 @@
 							],
 							"path": [
 								"dev",
-								"todos",
-								"3836b777-9bc4-4429-9b79-ba4e4f5f91c0",
+								"artworks",
+								":artworkId",
 								"attachment"
+							],
+							"variable": [
+								{
+									"key": "artworkId",
+									"value": "77a5f63e-9dee-435e-b063-cec9b5a65b37"
+								}
 							]
 						}
 					},
@@ -280,15 +296,15 @@
 	],
 	"variable": [
 		{
-			"id": "69ec72d5-bdea-4fb0-afdb-53bf07a19e47",
+			"id": "10307c13-7fb4-491c-8938-2c29d37da822",
 			"key": "apiId",
-			"value": "0jyw0cfm70",
+			"value": "z4kt2jr6eg",
 			"type": "string"
 		},
 		{
-			"id": "2124b41c-e952-4eab-b052-e8ec58c80ff2",
+			"id": "f8f49460-41c3-49d2-82e4-ebcd37e75ff6",
 			"key": "authToken",
-			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkVScDI0Vi0za2dfb1FTZEFPM0xBTSJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLWRldmVsb3Blci1uYW5vZGVncmVlLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwOTY5ODA4OTkyMzk2MDU5OTIxNyIsImF1ZCI6Im5GdnVsVno1VE9PU01UM0pUWUlKa1FoSFRNNTByekI0IiwiaWF0IjoxNTg2NjI0MjcyLCJleHAiOjE1ODY2NjAyNzIsImF0X2hhc2giOiJLV2VEdDR2X2N1QXg3VmtvMi13ZGZBIiwibm9uY2UiOiJTbC5kSzVpSlYuTmFSODU1N2ZZN3l-OU9MMGNmQjJyQiJ9.UCSGYrAH3qQiGYMQ4XU4s4lzrfMq-wWPJTSAprY56cammrrrY5yi_CSYFG6ovq4GKMoJncYVrLf2ZHVyBQU6CS4BIbs8yqFW4Jc1ZQu_5dK1KB-OTHHksHhTeK8Vt6iSEUPqA0STQhB8MdGZN7g5kkvrcmljWDir63VnM1KK1W6Hq223IbLidM52Lz1o9ghblsk5aemnSoAOnwQam-PyEWPixkf-FSIzOUQp-nYJyqXJXgYSWwdtOwGy3s3a7Nof7-Zxn1T7CxM28DUifCGLAk2B1Wr7O4ZqeAbnHXMopkzwsVkRXQUKfwrHjXQ6FOEWUHTnvIQ0UEKuPPd6go8rJg",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkVScDI0Vi0za2dfb1FTZEFPM0xBTSJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLWRldmVsb3Blci1uYW5vZGVncmVlLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwOTY5ODA4OTkyMzk2MDU5OTIxNyIsImF1ZCI6Im5GdnVsVno1VE9PU01UM0pUWUlKa1FoSFRNNTByekI0IiwiaWF0IjoxNTg2NjYxNjk3LCJleHAiOjE1ODY2OTc2OTcsImF0X2hhc2giOiJqdkFHOEx5N1kyR2l4ZUEyUG4xNUV3Iiwibm9uY2UiOiI4MU9LLmVQTVVUYzU0bUJmUGVrRXRZVm1rfm82WTR2dCJ9.efZFJB3l9mAAtCdGEO9asj5cZosYmdpkqy-y56uyYNr9UyRcfOTZNvmdk7OXfqJ3qHXd5BSF9Mr1eZs9AM63ey7WH_PnjT6N9xYDwwiN4AUQDrMlZW7bL-WdmDL2VuDHBnGlzU1N0w7VfQUjZG89GvobwR0ypFTTNr3rV3c80PFUZr4mSit-eRNGlOYBPnVaIBcI6z7KP-B7dXJk8KPAalWbIn-mI-ehiFuw5d2mn1Vtwi99t96CMne-TvjM196jXBEetbrrp_b5DDBL3J2DCo8RI07GTcePFMHRI6VvcW3tDVQ4T8d_YxE8rd8uzI9cSyjYEf_E9kehcvWta-FrIw",
 			"type": "string"
 		}
 	],

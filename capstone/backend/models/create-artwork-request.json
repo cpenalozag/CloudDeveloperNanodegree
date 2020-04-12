@@ -11,15 +11,11 @@
       },
       "forSale": {
         "type": "boolean"
-      },
-      "attachmentUrl": {
-        "type": "string"
       }
     },
     "required": [
         "name",
-        "forSale",
-        "attachmentUrl"
+        "forSale"
     ],
     "additionalProperties": false
   }

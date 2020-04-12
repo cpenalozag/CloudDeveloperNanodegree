@@ -4,7 +4,7 @@ Simple Gallery application using AWS Lambda and Serverless framework.
 
 # Functionality of the application
 
-This application will allow creating/removing/updating/fetching artwork items. Each artwork item has an attachment image. Each user has access all of the artworks but can only modify or delete artwork items that he/she has created.
+This application will allow creating/removing/updating/fetching artwork items. Each artwork item has an attachment image. Each user has access to all of the artworks but can only modify or delete artwork items that he/she has created.
 
 # Artwork items
 
@@ -20,7 +20,6 @@ The application should store TODO items, and each TODO item contains the followi
 
 # Backend
 All functions are deployed in AWS lambda and can be accessed by their respective API Gateway endpoint. Some of the endpoints require authentication.
-
 
 # Frontend
 

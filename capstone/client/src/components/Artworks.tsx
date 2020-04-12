@@ -1,5 +1,6 @@
 import { History } from 'history'
 import update from 'immutability-helper'
+import { parseUserId } from '../auth/utils'
 import * as React from 'react'
 import {
   Button,
@@ -25,13 +26,15 @@ interface ArtworksState {
   artworks: Artwork[]
   newArtworkName: string
   loadingArtworks: boolean
+  userId: string
 }
 
 export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> {
   state: ArtworksState = {
     artworks: [],
     newArtworkName: '',
-    loadingArtworks: true
+    loadingArtworks: true,
+    userId: ''
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,20 +47,17 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
 
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
-      const newTodo = await createArtwork(this.props.auth.getIdToken(), {
+      const newArtwork = await createArtwork(this.props.auth.getIdToken(), {
         name: this.state.newArtworkName,
         forSale: false
       })
-      this.setState({
-        artworks: [...this.state.artworks, newTodo],
-        newArtworkName: ''
-      })
+      this.props.history.push(`/artworks/${newArtwork.artworkId}/edit`)
     } catch(err) {
       alert('Artwork creation failed')
     }
   }
 
-  onTodoDelete = async (artworkId: string) => {
+  onArtworkDelete = async (artworkId: string) => {
     try {
       await deleteArtwork(this.props.auth.getIdToken(), artworkId)
       this.setState({
@@ -73,12 +73,14 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
       const artworks = await getArtworks()
       this.setState({
         artworks,
-        loadingArtworks: false
+        loadingArtworks: false,
+        userId: parseUserId(this.props.auth.idToken)
       })
     } catch (e) {
       alert(`Failed to fetch artworks: ${e.message}`)
     }
   }
+
 
   render() {
     return (
@@ -106,7 +108,7 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
+            placeholder="Artwork title"
             onChange={this.handleNameChange}
           />
         </Grid.Column>
@@ -140,32 +142,34 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
       <Grid padded>
         {this.state.artworks.map((artwork, pos) => {
           return (
-            <Grid.Row key={artwork.artworkId}>
+            <Grid.Column width={8} key={artwork.artworkId}>
+              <Grid.Row >
               <Grid.Column width={1} verticalAlign="middle">
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
                 {artwork.name}
               </Grid.Column>
-              <Grid.Column width={3} floated="right">
-                {artwork.createdAt}
+              <Grid.Column width={1} floated="right">
+              {this.state.userId === artwork.userId &&
+              <Button
+              icon
+              color="blue"
+              onClick={() => this.onEditButtonClick(artwork.artworkId)}
+            >
+              <Icon name="pencil" />
+            </Button>
+              }
+                
               </Grid.Column>
               <Grid.Column width={1} floated="right">
+                {this.state.userId === artwork.userId &&
                 <Button
-                  icon
-                  color="blue"
-                  onClick={() => this.onEditButtonClick(artwork.artworkId)}
-                >
-                  <Icon name="pencil" />
-                </Button>
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                <Button
-                  icon
-                  color="red"
-                  onClick={() => this.onTodoDelete(artwork.artworkId)}
-                >
-                  <Icon name="delete" />
-                </Button>
+                icon
+                color="red"
+                onClick={() => this.onArtworkDelete(artwork.artworkId)}
+              >
+                <Icon name="delete" />
+              </Button>}
               </Grid.Column>
               {artwork.attachmentUrl && (
                 <Image src={artwork.attachmentUrl} size="small" wrapped />
@@ -174,7 +178,9 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
                 <Divider />
               </Grid.Column>
             </Grid.Row>
-          )
+          
+            </Grid.Column>
+            )
         })}
       </Grid>
     )

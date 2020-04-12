@@ -30,6 +30,7 @@ export class ArtworkAccess {
   }
 
   async getUserArtworks(userId: String): Promise<ArtworkItem[]> {
+    console.log(userId)
     const result = await this.docClient.query({
       TableName: this.artworkTable,
       KeyConditionExpression: 'userId = :userId',
@@ -73,8 +74,6 @@ export class ArtworkAccess {
       "createdAt": artwork.createdAt
     };
 
-    artwork.attachmentUrl=`https://${this.bucketName}.s3.amazonaws.com/${artwork.attachmentUrl}`
-
     await this.docClient.update({
       TableName: this.artworkTable,
       Key: key,
@@ -94,7 +93,7 @@ export class ArtworkAccess {
   }
 
   async createArtwork(artwork: ArtworkItem): Promise<ArtworkItem> {
-
+    artwork.attachmentUrl=`https://${this.bucketName}.s3.amazonaws.com/${artwork.attachmentUrl}`
     await this.docClient.put({
       TableName: this.artworkTable,
       Item: artwork

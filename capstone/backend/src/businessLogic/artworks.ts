@@ -30,6 +30,8 @@ export async function updateArtwork(
   updateArtworkRequest: UpdateArtworkRequest
 ): Promise<ArtworkItem> {
   let artwork = await getArtworkById(artworkId)
+  if (!artwork) return null
+  
   for (let property in updateArtworkRequest) {
     if (updateArtworkRequest.hasOwnProperty(property)) {
       artwork[property] = updateArtworkRequest[property]
@@ -51,6 +53,7 @@ export async function createArtwork(
     artworkId: artworkId,
     userId: userId,
     createdAt: new Date().toISOString(),
+    attachmentUrl: artworkId
   }
 
   for (let property in createArtworkRequest) {
