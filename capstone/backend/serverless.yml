@@ -17,6 +17,7 @@ provider:
   environment:
     ARTWORK_TABLE: Artwork-table-nanodegree-${self:provider.stage}
     ARTWORK_ID_INDEX: ArtworkIdIndex
+    ARTWORK_CREATION_INDEX: ArtworkCreationIndex
     IMAGES_S3_BUCKET: artwork-attachments-nanodegree-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
@@ -65,6 +66,10 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ARTWORK_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ARTWORK_TABLE}/index/${self:provider.environment.ARTWORK_CREATION_INDEX}
 
   CreateArtwork:
     handler: src/lambda/http/createArtwork.handler
@@ -184,6 +189,10 @@ resources:
           - IndexName: ${self:provider.environment.ARTWORK_ID_INDEX}
             KeySchema:
               - AttributeName: artworkId
+                KeyType: HASH
+          - IndexName: ${self:provider.environment.ARTWORK_CREATION_INDEX}
+            KeySchema:
+              - AttributeName: createdAt
                 KeyType: HASH
             Projection:
               ProjectionType: ALL

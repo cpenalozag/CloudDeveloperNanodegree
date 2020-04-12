@@ -12,6 +12,7 @@ export class ArtworkAccess {
     private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
     private readonly s3 = new XAWS.S3({ signatureVersion: 'v4' }),
     private readonly artworkIdIndex = process.env.ARTWORK_ID_INDEX,
+    private readonly artworkCreationIndex = process.env.ARTWORK_CREATION_INDEX,
     private readonly bucketName = process.env.IMAGES_S3_BUCKET,
     private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION,
     private readonly artworkTable = process.env.ARTWORK_TABLE) {
@@ -30,7 +31,6 @@ export class ArtworkAccess {
   }
 
   async getUserArtworks(userId: String): Promise<ArtworkItem[]> {
-    console.log(userId)
     const result = await this.docClient.query({
       TableName: this.artworkTable,
       KeyConditionExpression: 'userId = :userId',
@@ -48,14 +48,17 @@ export class ArtworkAccess {
     console.log('Getting all artworks from this month')
 
     let date = new Date()
+    const lastDate = date.toISOString()
     date.setMonth(date.getMonth()-1)
-    const filterDateString = date.toISOString()
+    const firstDate = date.toISOString()
 
     const result = await this.docClient.query({
       TableName: this.artworkTable,
-      KeyConditionExpression: 'createdAt > :createdAt',
+      IndexName: this.artworkCreationIndex,
+      KeyConditionExpression: 'createdAt BETWEEN :start AND :end',
       ExpressionAttributeValues: {
-        ':createdAt': filterDateString
+        ':start': firstDate,
+        ':end': lastDate
       },
       ScanIndexForward: false
     })
