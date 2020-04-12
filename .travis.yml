@@ -1,29 +1,34 @@
 language: node_js
 node_js:
-  - "12.x"
+  - "12x"
+
 deploy_service_job: &DEPLOY_SERVICE_JOB
   cache:
     directories:
       - node_modules
       - ${SERVICE_PATH}/node_modules
-install:
+
+  install:
     - npm install -g serverless
     - travis_retry npm install
     - cd ${SERVICE_PATH}
     - travis_retry npm install
     - cd -
-script:
+
+  script:
     - cd ${SERVICE_PATH}
     - serverless deploy -s ${STAGE_NAME}
     - cd -
+
 environments:
   - &PRODUCTION_ENV
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_PROD}
     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_PROD}
-    
-- &DEVELOPMENT_ENV
+
+  - &DEVELOPMENT_ENV
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_DEV}
     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_DEV}
+
 jobs:
   include:
     # develop branch deploys to the 'dev' stage
@@ -34,7 +39,7 @@ jobs:
         - SERVICE_PATH="capstone/backend"
         - STAGE_NAME=dev
         - *DEVELOPMENT_ENV
-    - <<: *DEPLOY_SERVICE_JOB
+
     # master branch deploys to the 'prod' stage
     - <<: *DEPLOY_SERVICE_JOB
       name: "Deploy Gallery API"
