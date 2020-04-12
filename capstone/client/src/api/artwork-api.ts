@@ -4,12 +4,13 @@ import { CreateArtworkRequest } from '../types/CreateArtworkRequest';
 import { UpdateArtworkRequest } from '../types/UpdateArtworkRequest';
 import Axios from 'axios'
 
-export async function getArtworks(): Promise<Artwork[]> {
+export async function getArtworks(idToken: string): Promise<Artwork[]> {
   console.log('Fetching artworks')
 
   const response = await Axios.get(`${apiEndpoint}/artworks`, {
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
     },
   })
   console.log('Artworks:', response.data)

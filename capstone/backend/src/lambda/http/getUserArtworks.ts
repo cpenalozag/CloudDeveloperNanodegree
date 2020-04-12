@@ -5,9 +5,13 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import { getUserArtworks } from '../../businessLogic/artworks'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const userId = decodeURIComponent(event.pathParameters.userId)
+  const authorization = event.headers.Authorization
+  const split = authorization.split(' ')
+  const jwtToken = split[1]
 
-  const artworks = await getUserArtworks(userId)
+  console.log(jwtToken)
+
+  const artworks = await getUserArtworks(jwtToken)
 
   return {
     statusCode: 200,

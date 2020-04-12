@@ -70,7 +70,7 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
 
   async componentDidMount() {
     try {
-      const artworks = await getArtworks()
+      const artworks = await getArtworks(this.props.auth.idToken)
       this.setState({
         artworks,
         loadingArtworks: false,
@@ -140,7 +140,6 @@ export class Artworks extends React.PureComponent<ArtworksProps, ArtworksState> 
   renderArtworksList() {
     return (
       <Grid padded>
-        <Header as="h3">Artworks for sale</Header>
         {this.state.artworks.map((artwork, pos) => {
           return (
             <Grid.Column width={8} key={artwork.artworkId}>

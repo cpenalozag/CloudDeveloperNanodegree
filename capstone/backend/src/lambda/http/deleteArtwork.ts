@@ -5,6 +5,7 @@ import { deleteArtworks } from '../../businessLogic/artworks'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const artworkId = event.pathParameters.artworkId
+  console.log(artworkId)
 
   await deleteArtworks(artworkId)
 

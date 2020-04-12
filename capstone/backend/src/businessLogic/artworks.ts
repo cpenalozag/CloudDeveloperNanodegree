@@ -16,7 +16,9 @@ export async function getRecentArtworks(): Promise<ArtworkItem[]> {
   return await artworkAccess.getRecentArtworks()
 }
 
-export async function getUserArtworks(userId: string): Promise<ArtworkItem[]> {
+export async function getUserArtworks(jwtToken: string): Promise<ArtworkItem[]> {
+  const userId = parseUserId(jwtToken)
+  console.log(userId)
   return await artworkAccess.getUserArtworks(userId)
 }
 
